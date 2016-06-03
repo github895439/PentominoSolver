@@ -1,0 +1,2 @@
+# PentominoSolver
+Javascriptでペントミノを解く
