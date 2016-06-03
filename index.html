@@ -1,0 +1,3272 @@
+<html>
+<script lang="JavaScript">
+/**
+ * ピースＡの設置判定
+ * 座標位置そのものは判定しない
+ * @param x 設置X座標（内フィールド表記）
+ * @param y 設置Y座標（内フィールド表記）
+ * @param angle ピースの回転角度（０、９０、１８０、２７０）
+ * @param side ピースの表裏（０：表、１：１：裏）
+ * @return 置ける場合はＯＫ
+ *         置けない場合はＢＡＤ
+ */
+function f_Judge_A( x, y, angle, side ){
+	var xx;
+	var yy;
+
+	// 
+	xx = x + 4;
+	yy = y + 4;
+	switch ( angle % 180 ){
+	    case 0:{	// 180も同じ
+	        // 
+			if ( g_Frame[ xx + 1 ][ yy ] != 0 ){
+			    // 
+			    return "BAD";
+			}
+			if ( g_Frame[ xx + 2 ][ yy ] != 0 ){
+			    // 
+			    return "BAD";
+			}
+			if ( g_Frame[ xx + 3 ][ yy ] != 0 ){
+			    // 
+			    return "BAD";
+			}
+			if ( g_Frame[ xx + 4 ][ yy ] != 0 ){
+			    // 
+			    return "BAD";
+			}
+	        break;
+	    }
+	    default:{	// 90,270
+	        // 
+			if ( g_Frame[ xx ][ yy + 1 ] != 0 ){
+			    // 
+			    return "BAD";
+			}
+			if ( g_Frame[ xx ][ yy + 2 ] != 0 ){
+			    // 
+			    return "BAD";
+			}
+			if ( g_Frame[ xx ][ yy + 3 ] != 0 ){
+			    // 
+			    return "BAD";
+			}
+			if ( g_Frame[ xx ][ yy + 4 ] != 0 ){
+			    // 
+			    return "BAD";
+			}
+	        break;
+	    }
+	}
+	return "OK";
+}
+
+/**
+ * ピースＡの設置
+ * @param x 設置X座標（内フィールド表記）
+ * @param y 設置Y座標（内フィールド表記）
+ * @param angle ピースの回転角度（０、９０、１８０、２７０）
+ * @param side ピースの表裏（０：表、１：裏）
+ * @param status 状態
+ */
+function f_Set_A( x, y, angle, side, status ){
+	var xx;
+	var yy;
+
+	// 
+	xx = x + 4;
+	yy = y + 4;
+	g_Frame[ xx ][ yy ] = status;
+	// 
+	if ( status > 0 ){
+	    // 
+		if ( side == 0 ){
+		    // 
+		    g_Piece[ 0 ][ 2 ] = 1;
+		}
+	    // 
+		if ( angle < 180 ){
+		    // 
+		    g_Piece[ 0 ][ 1 ] = g_Piece[ 0 ][ 1 ] + 180;
+		}
+	}
+	switch ( angle % 180 ){
+	    case 0:{	// 180も同じ
+	        // 
+			g_Frame[ xx + 1 ][ yy ] = status;
+			g_Frame[ xx + 2 ][ yy ] = status;
+			g_Frame[ xx + 3 ][ yy ] = status;
+			g_Frame[ xx + 4 ][ yy ] = status;
+	        break;
+	    }
+	    default:{	// 270も同じ
+	        // 
+			g_Frame[ xx ][ yy + 1 ] = status;
+			g_Frame[ xx ][ yy + 2 ] = status;
+			g_Frame[ xx ][ yy + 3 ] = status;
+			g_Frame[ xx ][ yy + 4 ] = status;
+	        break;
+	    }
+	}
+}
+
+/**
+ * ピースＢの設置判定
+ * 座標位置そのものは判定しない
+ * @param x 設置X座標（内フィールド表記）
+ * @param y 設置Y座標（内フィールド表記）
+ * @param angle ピースの回転角度（０、９０、１８０、２７０）
+ * @param side ピースの表裏（０：表、１：裏）
+ * @return 置ける場合はＯＫ
+ *         置けない場合はＢＡＤ
+ */
+function f_Judge_B( x, y, angle, side ){
+	var xx;
+	var yy;
+
+	// 
+	xx = x + 4;
+	yy = y + 4;
+	switch ( side * 1 ){
+	    case 0:{
+			switch ( angle * 1 ){
+			    case 0:{
+			        // 
+					if ( g_Frame[ xx + 1 ][ yy ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 2 ][ yy ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 3 ][ yy ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 3 ][ yy + 1 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+			        break;
+			    }
+			    case 90:{
+			        // 
+					if ( g_Frame[ xx + 1 ][ yy - 0 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 1 ][ yy - 1 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 1 ][ yy - 2 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 1 ][ yy - 3 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+			        break;
+			    }
+			    case 180:{
+			        // 
+					if ( g_Frame[ xx + 0 ][ yy + 1 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 1 ][ yy + 1 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 2 ][ yy + 1 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 3 ][ yy + 1 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+			        break;
+			    }
+			    default:{	// 270
+			        // 
+					if ( g_Frame[ xx + 1 ][ yy + 0 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 0 ][ yy + 1 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 0 ][ yy + 2 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 0 ][ yy + 3 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+			        break;
+			    }
+			}
+			break;
+		}
+	    default:{	// 1
+			switch ( angle * 1 ){
+			    case 0:{
+			        // 
+					if ( g_Frame[ xx + 0 ][ yy + 1 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 1 ][ yy + 0 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 2 ][ yy + 0 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 3 ][ yy + 0 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+			        break;
+			    }
+			    case 90:{
+			        // 
+					if ( g_Frame[ xx + 1 ][ yy + 0 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 1 ][ yy + 1 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 1 ][ yy + 2 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 1 ][ yy + 3 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+			        break;
+			    }
+			    case 180:{
+			        // 
+					if ( g_Frame[ xx + 1 ][ yy - 0 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 2 ][ yy - 0 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 3 ][ yy - 0 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 3 ][ yy - 1 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+			        break;
+			    }
+			    default:{	// 270
+			        // 
+					if ( g_Frame[ xx + 0 ][ yy + 1 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 0 ][ yy + 2 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 0 ][ yy + 3 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 1 ][ yy + 3 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+			        break;
+			    }
+			}
+			break;
+	    }
+	}
+	return "OK";
+}
+
+/**
+ * ピースＢの設置
+ * @param x 設置X座標（内フィールド表記）
+ * @param y 設置Y座標（内フィールド表記）
+ * @param angle ピースの回転角度（０、９０、１８０、２７０）
+ * @param side ピースの表裏（０：表、１：裏）
+ * @param status 状態
+ */
+function f_Set_B( x, y, angle, side, status ){
+	var xx;
+	var yy;
+
+	// 
+	xx = x + 4;
+	yy = y + 4;
+	g_Frame[ xx ][ yy ] = status;
+	switch ( side * 1 ){
+	    case 0:{
+			switch ( angle * 1 ){
+			    case 0:{
+			        // 
+					g_Frame[ xx + 1 ][ yy ] = status;
+					g_Frame[ xx + 2 ][ yy ] = status;
+					g_Frame[ xx + 3 ][ yy ] = status;
+					g_Frame[ xx + 3 ][ yy + 1 ] = status;
+			        break;
+			    }
+			    case 90:{
+			        // 
+					g_Frame[ xx + 1 ][ yy - 0 ] = status;
+					g_Frame[ xx + 1 ][ yy - 1 ] = status;
+					g_Frame[ xx + 1 ][ yy - 2 ] = status;
+					g_Frame[ xx + 1 ][ yy - 3 ] = status;
+			        break;
+			    }
+			    case 180:{
+			        // 
+					g_Frame[ xx + 0 ][ yy + 1 ] = status;
+					g_Frame[ xx + 1 ][ yy + 1 ] = status;
+					g_Frame[ xx + 2 ][ yy + 1 ] = status;
+					g_Frame[ xx + 3 ][ yy + 1 ] = status;
+			        break;
+			    }
+			    default:{	// 270
+			        // 
+					g_Frame[ xx + 1 ][ yy + 0 ] = status;
+					g_Frame[ xx + 0 ][ yy + 1 ] = status;
+					g_Frame[ xx + 0 ][ yy + 2 ] = status;
+					g_Frame[ xx + 0 ][ yy + 3 ] = status;
+			        break;
+			    }
+			}
+			break;
+		}
+	    default:{	// 1
+			switch ( angle * 1 ){
+			    case 0:{
+			        // 
+					g_Frame[ xx + 0 ][ yy + 1 ] = status;
+					g_Frame[ xx + 1 ][ yy + 0 ] = status;
+					g_Frame[ xx + 2 ][ yy + 0 ] = status;
+					g_Frame[ xx + 3 ][ yy + 0 ] = status;
+			        break;
+			    }
+			    case 90:{
+			        // 
+					g_Frame[ xx + 1 ][ yy + 0 ] = status;
+					g_Frame[ xx + 1 ][ yy + 1 ] = status;
+					g_Frame[ xx + 1 ][ yy + 2 ] = status;
+					g_Frame[ xx + 1 ][ yy + 3 ] = status;
+			        break;
+			    }
+			    case 180:{
+			        // 
+					g_Frame[ xx + 1 ][ yy - 0 ] = status;
+					g_Frame[ xx + 2 ][ yy - 0 ] = status;
+					g_Frame[ xx + 3 ][ yy - 0 ] = status;
+					g_Frame[ xx + 3 ][ yy - 1 ] = status;
+			        break;
+			    }
+			    default:{	// 270
+			        // 
+					g_Frame[ xx + 0 ][ yy + 1 ] = status;
+					g_Frame[ xx + 0 ][ yy + 2 ] = status;
+					g_Frame[ xx + 0 ][ yy + 3 ] = status;
+					g_Frame[ xx + 1 ][ yy + 3 ] = status;
+			        break;
+			    }
+			}
+			break;
+		}
+	}
+}
+
+/**
+ * ピースＣの設置判定
+ * 座標位置そのものは判定しない
+ * @param x 設置X座標（内フィールド表記）
+ * @param y 設置Y座標（内フィールド表記）
+ * @param angle ピースの回転角度（０、９０、１８０、２７０）
+ * @param side ピースの表裏（０：表、１：裏）
+ * @return 置ける場合はＯＫ
+ *         置けない場合はＢＡＤ
+ */
+function f_Judge_C( x, y, angle, side ){
+	var xx;
+	var yy;
+
+	// 
+	xx = x + 4;
+	yy = y + 4;
+	switch ( side * 1 ){
+	    case 0:{
+			switch ( angle * 1 ){
+			    case 0:{
+			        // 
+					if ( g_Frame[ xx + 1 ][ yy + 0 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 2 ][ yy + 0 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 3 ][ yy + 0 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 2 ][ yy + 1 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+			        break;
+			    }
+			    case 90:{
+			        // 
+					if ( g_Frame[ xx + 1 ][ yy - 2 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 1 ][ yy - 1 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 1 ][ yy - 0 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 1 ][ yy + 1 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+			        break;
+			    }
+			    case 180:{
+			        // 
+					if ( g_Frame[ xx + 1 ][ yy + 0 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 2 ][ yy + 0 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 3 ][ yy + 0 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 1 ][ yy - 1 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+			        break;
+			    }
+			    default:{	// 270
+			        // 
+					if ( g_Frame[ xx + 0 ][ yy + 1 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 0 ][ yy + 2 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 0 ][ yy + 3 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 1 ][ yy + 1 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+			        break;
+			    }
+			}
+			break;
+		}
+	    default:{	// 1
+			switch ( angle * 1 ){
+			    case 0:{
+			        // 
+					if ( g_Frame[ xx + 1 ][ yy + 0 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 2 ][ yy + 0 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 3 ][ yy + 0 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 1 ][ yy + 1 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+			        break;
+			    }
+			    case 90:{
+			        // 
+					if ( g_Frame[ xx + 1 ][ yy - 1 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 1 ][ yy - 0 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 1 ][ yy + 1 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 1 ][ yy + 2 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+			        break;
+			    }
+			    case 180:{
+			        // 
+					if ( g_Frame[ xx + 1 ][ yy + 0 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 2 ][ yy + 0 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 3 ][ yy + 0 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 2 ][ yy - 1 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+			        break;
+			    }
+			    default:{	// 270
+			        // 
+					if ( g_Frame[ xx + 0 ][ yy + 1 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 0 ][ yy + 2 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 0 ][ yy + 3 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 1 ][ yy + 2 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+			        break;
+			    }
+			}
+			break;
+	    }
+	}
+	return "OK";
+}
+
+/**
+ * ピースＣの設置
+ * @param x 設置X座標（内フィールド表記）
+ * @param y 設置Y座標（内フィールド表記）
+ * @param angle ピースの回転角度（０、９０、１８０、２７０）
+ * @param side ピースの表裏（０：表、１：裏）
+ * @param status 状態
+ */
+function f_Set_C( x, y, angle, side, status ){
+	var xx;
+	var yy;
+
+	// 
+	xx = x + 4;
+	yy = y + 4;
+	g_Frame[ xx ][ yy ] = status;
+	switch ( side * 1 ){
+	    case 0:{
+			switch ( angle * 1 ){
+			    case 0:{
+			        // 
+					g_Frame[ xx + 1 ][ yy + 0 ] = status;
+					g_Frame[ xx + 2 ][ yy + 0 ] = status;
+					g_Frame[ xx + 3 ][ yy + 0 ] = status;
+					g_Frame[ xx + 2 ][ yy + 1 ] = status;
+			        break;
+			    }
+			    case 90:{
+			        // 
+					g_Frame[ xx + 1 ][ yy - 2 ] = status;
+					g_Frame[ xx + 1 ][ yy - 1 ] = status;
+					g_Frame[ xx + 1 ][ yy + 0 ] = status;
+					g_Frame[ xx + 1 ][ yy + 1 ] = status;
+			        break;
+			    }
+			    case 180:{
+			        // 
+					g_Frame[ xx + 1 ][ yy + 0 ] = status;
+					g_Frame[ xx + 2 ][ yy + 0 ] = status;
+					g_Frame[ xx + 3 ][ yy + 0 ] = status;
+					g_Frame[ xx + 1 ][ yy - 1 ] = status;
+			        break;
+			    }
+			    default:{	// 270
+			        // 
+					g_Frame[ xx + 0 ][ yy + 1 ] = status;
+					g_Frame[ xx + 0 ][ yy + 2 ] = status;
+					g_Frame[ xx + 0 ][ yy + 3 ] = status;
+					g_Frame[ xx + 1 ][ yy + 1 ] = status;
+			        break;
+			    }
+			}
+			break;
+		}
+	    default:{	// 1
+			switch ( angle * 1 ){
+			    case 0:{
+			        // 
+					g_Frame[ xx + 1 ][ yy + 0 ] = status;
+					g_Frame[ xx + 2 ][ yy + 0 ] = status;
+					g_Frame[ xx + 3 ][ yy + 0 ] = status;
+					g_Frame[ xx + 1 ][ yy + 1 ] = status;
+			        break;
+			    }
+			    case 90:{
+			        // 
+					g_Frame[ xx + 1 ][ yy - 1 ] = status;
+					g_Frame[ xx + 1 ][ yy + 0 ] = status;
+					g_Frame[ xx + 1 ][ yy + 1 ] = status;
+					g_Frame[ xx + 1 ][ yy + 2 ] = status;
+			        break;
+			    }
+			    case 180:{
+			        // 
+					g_Frame[ xx + 1 ][ yy + 0 ] = status;
+					g_Frame[ xx + 2 ][ yy + 0 ] = status;
+					g_Frame[ xx + 3 ][ yy + 0 ] = status;
+					g_Frame[ xx + 2 ][ yy - 1 ] = status;
+			        break;
+			    }
+			    default:{	// 270
+			        // 
+					g_Frame[ xx + 0 ][ yy + 1 ] = status;
+					g_Frame[ xx + 0 ][ yy + 2 ] = status;
+					g_Frame[ xx + 0 ][ yy + 3 ] = status;
+					g_Frame[ xx + 1 ][ yy + 2 ] = status;
+			        break;
+			    }
+			}
+			break;
+		}
+	}
+}
+
+/**
+ * ピースＤの設置判定
+ * 座標位置そのものは判定しない
+ * @param x 設置X座標（内フィールド表記）
+ * @param y 設置Y座標（内フィールド表記）
+ * @param angle ピースの回転角度（０、９０、１８０、２７０）
+ * @param side ピースの表裏（０：表、１：裏）
+ * @return 置ける場合はＯＫ
+ *         置けない場合はＢＡＤ
+ */
+function f_Judge_D( x, y, angle, side ){
+	var xx;
+	var yy;
+
+	// 
+	xx = x + 4;
+	yy = y + 4;
+	switch ( angle * 1 ){
+	    case 0:{
+	        // 
+			if ( g_Frame[ xx + 1 ][ yy ] != 0 ){
+			    // 
+			    return "BAD";
+			}
+			if ( g_Frame[ xx + 2 ][ yy ] != 0 ){
+			    // 
+			    return "BAD";
+			}
+			if ( g_Frame[ xx + 2 ][ yy + 1 ] != 0 ){
+			    // 
+			    return "BAD";
+			}
+			if ( g_Frame[ xx + 2 ][ yy + 2 ] != 0 ){
+			    // 
+			    return "BAD";
+			}
+	        break;
+	    }
+	    case 90:{
+	        // 
+			if ( g_Frame[ xx + 1 ][ yy ] != 0 ){
+			    // 
+			    return "BAD";
+			}
+			if ( g_Frame[ xx + 2 ][ yy ] != 0 ){
+			    // 
+			    return "BAD";
+			}
+			if ( g_Frame[ xx + 2 ][ yy - 1 ] != 0 ){
+			    // 
+			    return "BAD";
+			}
+			if ( g_Frame[ xx + 2 ][ yy - 2 ] != 0 ){
+			    // 
+			    return "BAD";
+			}
+	        break;
+	    }
+	    case 180:{
+	        // 
+			if ( g_Frame[ xx + 1 ][ yy + 0 ] != 0 ){
+			    // 
+			    return "BAD";
+			}
+			if ( g_Frame[ xx + 2 ][ yy + 0 ] != 0 ){
+			    // 
+			    return "BAD";
+			}
+			if ( g_Frame[ xx + 0 ][ yy + 1 ] != 0 ){
+			    // 
+			    return "BAD";
+			}
+			if ( g_Frame[ xx + 0 ][ yy + 2 ] != 0 ){
+			    // 
+			    return "BAD";
+			}
+	        break;
+	    }
+	    default:{	// 270
+	        // 
+			if ( g_Frame[ xx + 1 ][ yy + 0 ] != 0 ){
+			    // 
+			    return "BAD";
+			}
+			if ( g_Frame[ xx + 2 ][ yy + 0 ] != 0 ){
+			    // 
+			    return "BAD";
+			}
+			if ( g_Frame[ xx + 0 ][ yy - 1 ] != 0 ){
+			    // 
+			    return "BAD";
+			}
+			if ( g_Frame[ xx + 0 ][ yy - 2 ] != 0 ){
+			    // 
+			    return "BAD";
+			}
+	        break;
+	    }
+	}
+	return "OK";
+}
+
+/**
+ * ピースＤの設置
+ * @param x 設置X座標（内フィールド表記）
+ * @param y 設置Y座標（内フィールド表記）
+ * @param angle ピースの回転角度（０、９０、１８０、２７０）
+ * @param side ピースの表裏（０：表、１：裏）
+ * @param status 状態
+ */
+function f_Set_D( x, y, angle, side, status ){
+	var xx;
+	var yy;
+
+	// 
+	xx = x + 4;
+	yy = y + 4;
+	g_Frame[ xx ][ yy ] = status;
+	// 
+	if ( status > 0 ){
+	    // 
+		if ( side == 0 ){
+		    // 
+		    g_Piece[ 3 ][ 2 ] = 1;
+		}
+	}
+	switch ( angle * 1 ){
+	    case 0:{
+	        // 
+			g_Frame[ xx + 1 ][ yy ] = status;
+			g_Frame[ xx + 2 ][ yy ] = status;
+			g_Frame[ xx + 2 ][ yy + 1 ] = status;
+			g_Frame[ xx + 2 ][ yy + 2 ] = status;
+	        break;
+	    }
+	    case 90:{
+	        // 
+			g_Frame[ xx + 1 ][ yy ] = status;
+			g_Frame[ xx + 2 ][ yy ] = status;
+			g_Frame[ xx + 2 ][ yy - 1 ] = status;
+			g_Frame[ xx + 2 ][ yy - 2 ] = status;
+	        break;
+	    }
+	    case 180:{
+	        // 
+			g_Frame[ xx + 1 ][ yy + 0 ] = status;
+			g_Frame[ xx + 2 ][ yy + 0 ] = status;
+			g_Frame[ xx + 0 ][ yy + 1 ] = status;
+			g_Frame[ xx + 0 ][ yy + 2 ] = status;
+	        break;
+	    }
+	    default:{	// 270
+	        // 
+			g_Frame[ xx + 1 ][ yy + 0 ] = status;
+			g_Frame[ xx + 2 ][ yy + 0 ] = status;
+			g_Frame[ xx + 0 ][ yy - 1 ] = status;
+			g_Frame[ xx + 0 ][ yy - 2 ] = status;
+	        break;
+	    }
+	}
+}
+
+/**
+ * ピースＥの設置判定
+ * 座標位置そのものは判定しない
+ * @param x 設置X座標（内フィールド表記）
+ * @param y 設置Y座標（内フィールド表記）
+ * @param angle ピースの回転角度（０、９０、１８０、２７０）
+ * @param side ピースの表裏（０：表、１：裏）
+ * @return 置ける場合はＯＫ
+ *         置けない場合はＢＡＤ
+ */
+function f_Judge_E( x, y, angle, side ){
+	var xx;
+	var yy;
+
+	// 
+	xx = x + 4;
+	yy = y + 4;
+	switch ( angle * 1 ){
+	    case 0:{
+	        // 
+			if ( g_Frame[ xx + 1 ][ yy + 0 ] != 0 ){
+			    // 
+			    return "BAD";
+			}
+			if ( g_Frame[ xx + 2 ][ yy + 0 ] != 0 ){
+			    // 
+			    return "BAD";
+			}
+			if ( g_Frame[ xx + 1 ][ yy + 1 ] != 0 ){
+			    // 
+			    return "BAD";
+			}
+			if ( g_Frame[ xx + 1 ][ yy + 2 ] != 0 ){
+			    // 
+			    return "BAD";
+			}
+	        break;
+	    }
+	    case 90:{
+	        // 
+			if ( g_Frame[ xx + 1 ][ yy + 0 ] != 0 ){
+			    // 
+			    return "BAD";
+			}
+			if ( g_Frame[ xx + 2 ][ yy + 0 ] != 0 ){
+			    // 
+			    return "BAD";
+			}
+			if ( g_Frame[ xx + 2 ][ yy - 1 ] != 0 ){
+			    // 
+			    return "BAD";
+			}
+			if ( g_Frame[ xx + 2 ][ yy + 1 ] != 0 ){
+			    // 
+			    return "BAD";
+			}
+	        break;
+	    }
+	    case 180:{
+	        // 
+			if ( g_Frame[ xx + 1 ][ yy ] != 0 ){
+			    // 
+			    return "BAD";
+			}
+			if ( g_Frame[ xx + 2 ][ yy ] != 0 ){
+			    // 
+			    return "BAD";
+			}
+			if ( g_Frame[ xx + 1 ][ yy - 1 ] != 0 ){
+			    // 
+			    return "BAD";
+			}
+			if ( g_Frame[ xx + 1 ][ yy - 2 ] != 0 ){
+			    // 
+			    return "BAD";
+			}
+	        break;
+	    }
+	    default:{	// 270
+	        // 
+			if ( g_Frame[ xx + 0 ][ yy + 1 ] != 0 ){
+			    // 
+			    return "BAD";
+			}
+			if ( g_Frame[ xx + 0 ][ yy + 2 ] != 0 ){
+			    // 
+			    return "BAD";
+			}
+			if ( g_Frame[ xx + 1 ][ yy + 1 ] != 0 ){
+			    // 
+			    return "BAD";
+			}
+			if ( g_Frame[ xx + 2 ][ yy + 1 ] != 0 ){
+			    // 
+			    return "BAD";
+			}
+	        break;
+	    }
+	}
+	return "OK";
+}
+
+/**
+ * ピースＥの設置
+ * @param x 設置X座標（内フィールド表記）
+ * @param y 設置Y座標（内フィールド表記）
+ * @param angle ピースの回転角度（０、９０、１８０、２７０）
+ * @param side ピースの表裏（０：表、１：裏）
+ * @param status 状態
+ */
+function f_Set_E( x, y, angle, side, status ){
+	var xx;
+	var yy;
+
+	// 
+	xx = x + 4;
+	yy = y + 4;
+	g_Frame[ xx ][ yy ] = status;
+	// 
+	if ( status > 0 ){
+	    // 
+		if ( side == 0 ){
+		    // 
+		    g_Piece[ 4 ][ 2 ] = 1;
+		}
+	}
+	switch ( angle * 1 ){
+	    case 0:{
+	        // 
+			g_Frame[ xx + 1 ][ yy + 0 ] = status;
+			g_Frame[ xx + 2 ][ yy + 0 ] = status;
+			g_Frame[ xx + 1 ][ yy + 1 ] = status;
+			g_Frame[ xx + 1 ][ yy + 2 ] = status;
+	        break;
+	    }
+	    case 90:{
+	        // 
+			g_Frame[ xx + 1 ][ yy + 0 ] = status;
+			g_Frame[ xx + 2 ][ yy + 0 ] = status;
+			g_Frame[ xx + 2 ][ yy - 1 ] = status;
+			g_Frame[ xx + 2 ][ yy + 1 ] = status;
+	        break;
+	    }
+	    case 180:{
+	        // 
+			g_Frame[ xx + 1 ][ yy + 0 ] = status;
+			g_Frame[ xx + 2 ][ yy + 0 ] = status;
+			g_Frame[ xx + 1 ][ yy - 1 ] = status;
+			g_Frame[ xx + 1 ][ yy - 2 ] = status;
+	        break;
+	    }
+	    default:{	// 270
+	        // 
+			g_Frame[ xx + 0 ][ yy + 1 ] = status;
+			g_Frame[ xx + 0 ][ yy + 2 ] = status;
+			g_Frame[ xx + 1 ][ yy + 1 ] = status;
+			g_Frame[ xx + 2 ][ yy + 1 ] = status;
+	        break;
+	    }
+	}
+}
+
+/**
+ * ピースＦの設置判定
+ * 座標位置そのものは判定しない
+ * @param x 設置X座標（内フィールド表記）
+ * @param y 設置Y座標（内フィールド表記）
+ * @param angle ピースの回転角度（０、９０、１８０、２７０）
+ * @param side ピースの表裏（０：表、１：裏）
+ * @return 置ける場合はＯＫ
+ *         置けない場合はＢＡＤ
+ */
+function f_Judge_F( x, y, angle, side ){
+	var xx;
+	var yy;
+
+	// 
+	xx = x + 4;
+	yy = y + 4;
+	switch ( side * 1 ){
+	    case 0:{
+			switch ( angle * 1 ){
+			    case 0:{
+			        // 
+					if ( g_Frame[ xx + 1 ][ yy ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 2 ][ yy ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 1 ][ yy + 1 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 2 ][ yy + 1 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+			        break;
+			    }
+			    case 90:{
+			        // 
+					if ( g_Frame[ xx + 1 ][ yy - 1 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 1 ][ yy + 0 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 1 ][ yy + 1 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 0 ][ yy + 1 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+			        break;
+			    }
+			    case 180:{
+			        // 
+					if ( g_Frame[ xx + 1 ][ yy + 0 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 0 ][ yy + 1 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 1 ][ yy + 1 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 2 ][ yy + 1 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+			        break;
+			    }
+			    default:{	// 270
+			        // 
+					if ( g_Frame[ xx + 0 ][ yy + 1 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 0 ][ yy + 2 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 1 ][ yy + 0 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 1 ][ yy + 1 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+			        break;
+			    }
+			}
+			break;
+		}
+	    default:{	// 1
+			switch ( angle * 1 ){
+			    case 0:{
+			        // 
+					if ( g_Frame[ xx + 1 ][ yy + 0 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 2 ][ yy + 0 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 0 ][ yy + 1 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 1 ][ yy + 1 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+			        break;
+			    }
+			    case 90:{
+			        // 
+					if ( g_Frame[ xx + 1 ][ yy + 0 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 1 ][ yy + 1 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 1 ][ yy + 2 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 0 ][ yy + 1 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+			        break;
+			    }
+			    case 180:{
+			        // 
+					if ( g_Frame[ xx + 1 ][ yy + 0 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 2 ][ yy + 0 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 1 ][ yy - 1 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 2 ][ yy - 1 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+			        break;
+			    }
+			    default:{	// 270
+			        // 
+					if ( g_Frame[ xx + 0 ][ yy + 1 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 0 ][ yy + 2 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 1 ][ yy + 1 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 1 ][ yy + 2 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+			        break;
+			    }
+			}
+			break;
+	    }
+	}
+	return "OK";
+}
+
+/**
+ * ピースＦの設置
+ * @param x 設置X座標（内フィールド表記）
+ * @param y 設置Y座標（内フィールド表記）
+ * @param angle ピースの回転角度（０、９０、１８０、２７０）
+ * @param side ピースの表裏（０：表、１：裏）
+ * @param status 状態
+ */
+function f_Set_F( x, y, angle, side, status ){
+	var xx;
+	var yy;
+
+	// 
+	xx = x + 4;
+	yy = y + 4;
+	g_Frame[ xx ][ yy ] = status;
+	switch ( side * 1 ){
+	    case 0:{
+			switch ( angle * 1 ){
+			    case 0:{
+			        // 
+					g_Frame[ xx + 1 ][ yy + 0 ] = status;
+					g_Frame[ xx + 2 ][ yy + 0 ] = status;
+					g_Frame[ xx + 1 ][ yy + 1 ] = status;
+					g_Frame[ xx + 2 ][ yy + 1 ] = status;
+			        break;
+			    }
+			    case 90:{
+			        // 
+					g_Frame[ xx + 1 ][ yy - 1 ] = status;
+					g_Frame[ xx + 1 ][ yy + 0 ] = status;
+					g_Frame[ xx + 1 ][ yy + 1 ] = status;
+					g_Frame[ xx + 0 ][ yy + 1 ] = status;
+			        break;
+			    }
+			    case 180:{
+			        // 
+					g_Frame[ xx + 0 ][ yy + 1 ] = status;
+					g_Frame[ xx + 1 ][ yy + 1 ] = status;
+					g_Frame[ xx + 2 ][ yy + 1 ] = status;
+					g_Frame[ xx + 1 ][ yy + 0 ] = status;
+			        break;
+			    }
+			    default:{	// 270
+			        // 
+					g_Frame[ xx + 0 ][ yy + 1 ] = status;
+					g_Frame[ xx + 0 ][ yy + 2 ] = status;
+					g_Frame[ xx + 1 ][ yy + 0 ] = status;
+					g_Frame[ xx + 1 ][ yy + 1 ] = status;
+			        break;
+			    }
+			}
+			break;
+		}
+	    default:{	// 1
+			switch ( angle * 1 ){
+			    case 0:{
+			        // 
+					g_Frame[ xx + 1 ][ yy + 0 ] = status;
+					g_Frame[ xx + 2 ][ yy + 0 ] = status;
+					g_Frame[ xx + 0 ][ yy + 1 ] = status;
+					g_Frame[ xx + 1 ][ yy + 1 ] = status;
+			        break;
+			    }
+			    case 90:{
+			        // 
+					g_Frame[ xx + 1 ][ yy + 0 ] = status;
+					g_Frame[ xx + 1 ][ yy + 1 ] = status;
+					g_Frame[ xx + 1 ][ yy + 2 ] = status;
+					g_Frame[ xx + 0 ][ yy + 1 ] = status;
+			        break;
+			    }
+			    case 180:{
+			        // 
+					g_Frame[ xx + 1 ][ yy + 0 ] = status;
+					g_Frame[ xx + 2 ][ yy + 0 ] = status;
+					g_Frame[ xx + 1 ][ yy - 1 ] = status;
+					g_Frame[ xx + 2 ][ yy - 1 ] = status;
+			        break;
+			    }
+			    default:{	// 270
+			        // 
+					g_Frame[ xx + 0 ][ yy + 1 ] = status;
+					g_Frame[ xx + 0 ][ yy + 2 ] = status;
+					g_Frame[ xx + 1 ][ yy + 1 ] = status;
+					g_Frame[ xx + 1 ][ yy + 2 ] = status;
+			        break;
+			    }
+			}
+			break;
+		}
+	}
+}
+
+/**
+ * ピースＧの設置判定
+ * 座標位置そのものは判定しない
+ * @param x 設置X座標（内フィールド表記）
+ * @param y 設置Y座標（内フィールド表記）
+ * @param angle ピースの回転角度（０、９０、１８０、２７０）
+ * @param side ピースの表裏（０：表、１：裏）
+ * @return 置ける場合はＯＫ
+ *         置けない場合はＢＡＤ
+ */
+function f_Judge_G( x, y, angle, side ){
+	var xx;
+	var yy;
+
+	// 
+	xx = x + 4;
+	yy = y + 4;
+	switch ( angle * 1 ){
+	    case 0:{
+	        // 
+			if ( g_Frame[ xx + 1 ][ yy + 0 ] != 0 ){
+			    // 
+			    return "BAD";
+			}
+			if ( g_Frame[ xx + 1 ][ yy + 1 ] != 0 ){
+			    // 
+			    return "BAD";
+			}
+			if ( g_Frame[ xx + 1 ][ yy + 2 ] != 0 ){
+			    // 
+			    return "BAD";
+			}
+			if ( g_Frame[ xx + 0 ][ yy + 2 ] != 0 ){
+			    // 
+			    return "BAD";
+			}
+	        break;
+	    }
+	    case 90:{
+	        // 
+			if ( g_Frame[ xx + 0 ][ yy + 1 ] != 0 ){
+			    // 
+			    return "BAD";
+			}
+			if ( g_Frame[ xx + 1 ][ yy + 1 ] != 0 ){
+			    // 
+			    return "BAD";
+			}
+			if ( g_Frame[ xx + 2 ][ yy + 1 ] != 0 ){
+			    // 
+			    return "BAD";
+			}
+			if ( g_Frame[ xx + 2 ][ yy + 0 ] != 0 ){
+			    // 
+			    return "BAD";
+			}
+	        break;
+	    }
+	    case 180:{
+	        // 
+			if ( g_Frame[ xx + 0 ][ yy + 1 ] != 0 ){
+			    // 
+			    return "BAD";
+			}
+			if ( g_Frame[ xx + 0 ][ yy + 2 ] != 0 ){
+			    // 
+			    return "BAD";
+			}
+			if ( g_Frame[ xx + 1 ][ yy + 0 ] != 0 ){
+			    // 
+			    return "BAD";
+			}
+			if ( g_Frame[ xx + 1 ][ yy + 2 ] != 0 ){
+			    // 
+			    return "BAD";
+			}
+	        break;
+	    }
+	    default:{	// 270
+	        // 
+			if ( g_Frame[ xx + 1 ][ yy + 0 ] != 0 ){
+			    // 
+			    return "BAD";
+			}
+			if ( g_Frame[ xx + 2 ][ yy + 0 ] != 0 ){
+			    // 
+			    return "BAD";
+			}
+			if ( g_Frame[ xx + 0 ][ yy + 1 ] != 0 ){
+			    // 
+			    return "BAD";
+			}
+			if ( g_Frame[ xx + 2 ][ yy + 1 ] != 0 ){
+			    // 
+			    return "BAD";
+			}
+	        break;
+	    }
+	}
+	return "OK";
+}
+
+/**
+ * ピースＧの設置
+ * @param x 設置X座標（内フィールド表記）
+ * @param y 設置Y座標（内フィールド表記）
+ * @param angle ピースの回転角度（０、９０、１８０、２７０）
+ * @param side ピースの表裏（０：表、１：裏）
+ * @param status 状態
+ */
+function f_Set_G( x, y, angle, side, status ){
+	var xx;
+	var yy;
+
+	// 
+	xx = x + 4;
+	yy = y + 4;
+	g_Frame[ xx ][ yy ] = status;
+	// 
+	if ( status > 0 ){
+	    // 
+		if ( side == 0 ){
+		    // 
+		    g_Piece[ 6 ][ 2 ] = 1;
+		}
+	}
+	switch ( angle * 1 ){
+	    case 0:{
+	        // 
+			g_Frame[ xx + 1 ][ yy + 0] = status;
+			g_Frame[ xx + 1 ][ yy + 1 ] = status;
+			g_Frame[ xx + 1 ][ yy + 2 ] = status;
+			g_Frame[ xx + 0 ][ yy + 2 ] = status;
+	        break;
+	    }
+	    case 90:{
+	        // 
+			g_Frame[ xx + 0 ][ yy + 1 ] = status;
+			g_Frame[ xx + 1 ][ yy + 1 ] = status;
+			g_Frame[ xx + 2 ][ yy + 1 ] = status;
+			g_Frame[ xx + 2 ][ yy + 0 ] = status;
+	        break;
+	    }
+	    case 180:{
+	        // 
+			g_Frame[ xx + 0 ][ yy + 1 ] = status;
+			g_Frame[ xx + 0 ][ yy + 2 ] = status;
+			g_Frame[ xx + 1 ][ yy + 0 ] = status;
+			g_Frame[ xx + 1 ][ yy + 2 ] = status;
+	        break;
+	    }
+	    default:{	// 270
+	        // 
+			g_Frame[ xx + 1 ][ yy + 0 ] = status;
+			g_Frame[ xx + 2 ][ yy + 0 ] = status;
+			g_Frame[ xx + 0 ][ yy + 1 ] = status;
+			g_Frame[ xx + 2 ][ yy + 1 ] = status;
+	        break;
+	    }
+	}
+}
+
+/**
+ * ピースＨの設置判定
+ * 座標位置そのものは判定しない
+ * @param x 設置X座標（内フィールド表記）
+ * @param y 設置Y座標（内フィールド表記）
+ * @param angle ピースの回転角度（０、９０、１８０、２７０）
+ * @param side ピースの表裏（０：表、１：裏）
+ * @return 置ける場合はＯＫ
+ *         置けない場合はＢＡＤ
+ */
+function f_Judge_H( x, y, angle, side ){
+	var xx;
+	var yy;
+
+	// 
+	xx = x + 4;
+	yy = y + 4;
+	switch ( angle * 1 ){
+	    case 0:{
+	        // 
+			if ( g_Frame[ xx + 1 ][ yy + 0 ] != 0 ){
+			    // 
+			    return "BAD";
+			}
+			if ( g_Frame[ xx + 1 ][ yy + 1 ] != 0 ){
+			    // 
+			    return "BAD";
+			}
+			if ( g_Frame[ xx + 2 ][ yy + 1 ] != 0 ){
+			    // 
+			    return "BAD";
+			}
+			if ( g_Frame[ xx + 2 ][ yy + 2 ] != 0 ){
+			    // 
+			    return "BAD";
+			}
+	        break;
+	    }
+	    case 90:{
+	        // 
+			if ( g_Frame[ xx + 1 ][ yy + 0 ] != 0 ){
+			    // 
+			    return "BAD";
+			}
+			if ( g_Frame[ xx + 1 ][ yy - 1 ] != 0 ){
+			    // 
+			    return "BAD";
+			}
+			if ( g_Frame[ xx + 2 ][ yy - 1 ] != 0 ){
+			    // 
+			    return "BAD";
+			}
+			if ( g_Frame[ xx + 2 ][ yy - 2 ] != 0 ){
+			    // 
+			    return "BAD";
+			}
+	        break;
+	    }
+	    case 180:{
+	        // 
+			if ( g_Frame[ xx + 0 ][ yy + 1 ] != 0 ){
+			    // 
+			    return "BAD";
+			}
+			if ( g_Frame[ xx + 1 ][ yy + 1 ] != 0 ){
+			    // 
+			    return "BAD";
+			}
+			if ( g_Frame[ xx + 1 ][ yy + 2 ] != 0 ){
+			    // 
+			    return "BAD";
+			}
+			if ( g_Frame[ xx + 2 ][ yy + 2 ] != 0 ){
+			    // 
+			    return "BAD";
+			}
+	        break;
+	    }
+	    default:{	// 270
+	        // 
+			if ( g_Frame[ xx + 0 ][ yy + 1 ] != 0 ){
+			    // 
+			    return "BAD";
+			}
+			if ( g_Frame[ xx + 1 ][ yy - 0 ] != 0 ){
+			    // 
+			    return "BAD";
+			}
+			if ( g_Frame[ xx + 1 ][ yy - 1 ] != 0 ){
+			    // 
+			    return "BAD";
+			}
+			if ( g_Frame[ xx + 2 ][ yy - 1 ] != 0 ){
+			    // 
+			    return "BAD";
+			}
+	        break;
+	    }
+	}
+	return "OK";
+}
+
+/**
+ * ピースＨの設置
+ * @param x 設置X座標（内フィールド表記）
+ * @param y 設置Y座標（内フィールド表記）
+ * @param angle ピースの回転角度（０、９０、１８０、２７０）
+ * @param side ピースの表裏（０：表、１：裏）
+ * @param status 状態
+ */
+function f_Set_H( x, y, angle, side, status ){
+	var xx;
+	var yy;
+
+	// 
+	xx = x + 4;
+	yy = y + 4;
+	g_Frame[ xx ][ yy ] = status;
+	// 
+	if ( status > 0 ){
+	    // 
+		if ( side == 0 ){
+		    // 
+		    g_Piece[ 7 ][ 2 ] = 1;
+		}
+	}
+	switch ( angle * 1 ){
+	    case 0:{
+	        // 
+			g_Frame[ xx + 1 ][ yy + 0 ] = status;
+			g_Frame[ xx + 1 ][ yy + 1 ] = status;
+			g_Frame[ xx + 2 ][ yy + 1 ] = status;
+			g_Frame[ xx + 2 ][ yy + 2 ] = status;
+	        break;
+	    }
+	    case 90:{
+	        // 
+			g_Frame[ xx + 1 ][ yy + 0 ] = status;
+			g_Frame[ xx + 1 ][ yy - 1 ] = status;
+			g_Frame[ xx + 2 ][ yy - 1 ] = status;
+			g_Frame[ xx + 2 ][ yy - 2 ] = status;
+	        break;
+	    }
+	    case 180:{
+	        // 
+			g_Frame[ xx + 0 ][ yy + 1 ] = status;
+			g_Frame[ xx + 1 ][ yy + 1 ] = status;
+			g_Frame[ xx + 1 ][ yy + 2 ] = status;
+			g_Frame[ xx + 2 ][ yy + 2 ] = status;
+	        break;
+	    }
+	    default:{	// 270
+	        // 
+			g_Frame[ xx + 0 ][ yy + 1 ] = status;
+			g_Frame[ xx + 1 ][ yy - 0 ] = status;
+			g_Frame[ xx + 1 ][ yy - 1 ] = status;
+			g_Frame[ xx + 2 ][ yy - 1 ] = status;
+	        break;
+	    }
+	}
+}
+
+/**
+ * ピースＩの設置判定
+ * 座標位置そのものは判定しない
+ * @param x 設置X座標（内フィールド表記）
+ * @param y 設置Y座標（内フィールド表記）
+ * @param angle ピースの回転角度（０、９０、１８０、２７０）
+ * @param side ピースの表裏（０：表、１：裏）
+ * @return 置ける場合はＯＫ
+ *         置けない場合はＢＡＤ
+ */
+function f_Judge_I( x, y, angle, side ){
+	var xx;
+	var yy;
+
+	// 
+	xx = x + 4;
+	yy = y + 4;
+    // 
+	if ( g_Frame[ xx + 1 ][ yy + 0 ] != 0 ){
+	    // 
+	    return "BAD";
+	}
+	if ( g_Frame[ xx + 2 ][ yy + 0 ] != 0 ){
+	    // 
+	    return "BAD";
+	}
+	if ( g_Frame[ xx + 1 ][ yy + 1 ] != 0 ){
+	    // 
+	    return "BAD";
+	}
+	if ( g_Frame[ xx + 1 ][ yy - 1 ] != 0 ){
+	    // 
+	    return "BAD";
+	}
+	return "OK";
+}
+
+/**
+ * ピースＩの設置
+ * @param x 設置X座標（内フィールド表記）
+ * @param y 設置Y座標（内フィールド表記）
+ * @param angle ピースの回転角度（０、９０、１８０、２７０）
+ * @param side ピースの表裏（０：表、１：裏）
+ * @param status 状態
+ */
+function f_Set_I( x, y, angle, side, status ){
+	var xx;
+	var yy;
+
+	// 
+	xx = x + 4;
+	yy = y + 4;
+	g_Frame[ xx ][ yy ] = status;
+	// 
+	if ( status > 0 ){
+	    // 
+	    g_Piece[ 8 ][ 1 ] = 270;
+	    g_Piece[ 8 ][ 2 ] = 1;
+	}
+	g_Frame[ xx + 1 ][ yy + 0 ] = status;
+	g_Frame[ xx + 2 ][ yy + 0 ] = status;
+	g_Frame[ xx + 1 ][ yy + 1 ] = status;
+	g_Frame[ xx + 1 ][ yy - 1 ] = status;
+}
+
+/**
+ * ピースＪの設置判定
+ * 座標位置そのものは判定しない
+ * @param x 設置X座標（内フィールド表記）
+ * @param y 設置Y座標（内フィールド表記）
+ * @param angle ピースの回転角度（０、９０、１８０、２７０）
+ * @param side ピースの表裏（０：表、１：裏）
+ * @return 置ける場合はＯＫ
+ *         置けない場合はＢＡＤ
+ */
+function f_Judge_J( x, y, angle, side ){
+	var xx;
+	var yy;
+
+	// 
+	xx = x + 4;
+	yy = y + 4;
+	switch ( side * 1 ){
+	    case 0:{
+			switch ( angle * 1 ){
+			    case 0:{
+			        // 
+					if ( g_Frame[ xx + 1 ][ yy + 0 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 2 ][ yy + 0 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 2 ][ yy + 1 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 3 ][ yy + 1 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+			        break;
+			    }
+			    case 90:{
+			        // 
+					if ( g_Frame[ xx + 1 ][ yy - 2 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 1 ][ yy - 1 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 1 ][ yy + 0 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 0 ][ yy + 1 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+			        break;
+			    }
+			    case 180:{
+			        // 
+					if ( g_Frame[ xx + 1 ][ yy + 0 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 1 ][ yy + 1 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 2 ][ yy + 1 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 3 ][ yy + 1 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+			        break;
+			    }
+			    default:{	// 270
+			        // 
+					if ( g_Frame[ xx + 0 ][ yy + 1 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 0 ][ yy + 2 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 1 ][ yy - 0 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 1 ][ yy - 1 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+			        break;
+			    }
+			}
+			break;
+		}
+	    default:{	// 1
+			switch ( angle * 1 ){
+			    case 0:{
+			        // 
+					if ( g_Frame[ xx + 1 ][ yy + 0 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 1 ][ yy - 1 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 2 ][ yy - 1 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 3 ][ yy - 1 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+			        break;
+			    }
+			    case 90:{
+			        // 
+					if ( g_Frame[ xx + 0 ][ yy + 1 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 1 ][ yy + 1 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 1 ][ yy + 2 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 1 ][ yy + 3 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+			        break;
+			    }
+			    case 180:{
+			        // 
+					if ( g_Frame[ xx + 1 ][ yy + 0 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 2 ][ yy + 0 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 2 ][ yy - 1 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 3 ][ yy - 1 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+			        break;
+			    }
+			    default:{	// 270
+			        // 
+					if ( g_Frame[ xx + 0 ][ yy + 1 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 0 ][ yy + 2 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 1 ][ yy + 2 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 1 ][ yy + 3 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+			        break;
+			    }
+			}
+			break;
+	    }
+	}
+	return "OK";
+}
+
+/**
+ * ピースＪの設置
+ * @param x 設置X座標（内フィールド表記）
+ * @param y 設置Y座標（内フィールド表記）
+ * @param angle ピースの回転角度（０、９０、１８０、２７０）
+ * @param side ピースの表裏（０：表、１：裏）
+ * @param status 状態
+ */
+function f_Set_J( x, y, angle, side, status ){
+	var xx;
+	var yy;
+
+	// 
+	xx = x + 4;
+	yy = y + 4;
+	g_Frame[ xx ][ yy ] = status;
+	switch ( side * 1 ){
+	    case 0:{
+			switch ( angle * 1 ){
+			    case 0:{
+			        // 
+					g_Frame[ xx + 1 ][ yy + 0 ] = status;
+					g_Frame[ xx + 2 ][ yy + 0 ] = status;
+					g_Frame[ xx + 2 ][ yy + 1 ] = status;
+					g_Frame[ xx + 3 ][ yy + 1 ] = status;
+			        break;
+			    }
+			    case 90:{
+			        // 
+					g_Frame[ xx + 0 ][ yy + 1 ] = status;
+					g_Frame[ xx + 1 ][ yy - 0 ] = status;
+					g_Frame[ xx + 1 ][ yy - 1 ] = status;
+					g_Frame[ xx + 1 ][ yy - 2 ] = status;
+			        break;
+			    }
+			    case 180:{
+			        // 
+					g_Frame[ xx + 1 ][ yy + 0 ] = status;
+					g_Frame[ xx + 1 ][ yy + 1 ] = status;
+					g_Frame[ xx + 2 ][ yy + 1 ] = status;
+					g_Frame[ xx + 3 ][ yy + 1 ] = status;
+			        break;
+			    }
+			    default:{	// 270
+			        // 
+					g_Frame[ xx + 0 ][ yy + 1 ] = status;
+					g_Frame[ xx + 0 ][ yy + 2 ] = status;
+					g_Frame[ xx + 1 ][ yy - 0 ] = status;
+					g_Frame[ xx + 1 ][ yy - 1 ] = status;
+			        break;
+			    }
+			}
+			break;
+		}
+	    default:{
+			switch ( angle * 1 ){
+			    case 0:{
+			        // 
+					g_Frame[ xx + 1 ][ yy - 0 ] = status;
+					g_Frame[ xx + 1 ][ yy - 1 ] = status;
+					g_Frame[ xx + 2 ][ yy - 1 ] = status;
+					g_Frame[ xx + 3 ][ yy - 1 ] = status;
+			        break;
+			    }
+			    case 90:{
+			        // 
+					g_Frame[ xx + 0 ][ yy + 1 ] = status;
+					g_Frame[ xx + 1 ][ yy + 1 ] = status;
+					g_Frame[ xx + 1 ][ yy + 2 ] = status;
+					g_Frame[ xx + 1 ][ yy + 3 ] = status;
+			        break;
+			    }
+			    case 180:{
+			        // 
+					g_Frame[ xx + 1 ][ yy - 0 ] = status;
+					g_Frame[ xx + 2 ][ yy - 0 ] = status;
+					g_Frame[ xx + 2 ][ yy - 1 ] = status;
+					g_Frame[ xx + 3 ][ yy - 1 ] = status;
+			        break;
+			    }
+			    default:{	// 270
+			        // 
+					g_Frame[ xx + 0 ][ yy + 1 ] = status;
+					g_Frame[ xx + 0 ][ yy + 2 ] = status;
+					g_Frame[ xx + 1 ][ yy + 2 ] = status;
+					g_Frame[ xx + 1 ][ yy + 3 ] = status;
+			        break;
+			    }
+			}
+			break;
+		}
+	}
+}
+
+/**
+ * ピースＫの設置判定
+ * 座標位置そのものは判定しない
+ * @param x 設置X座標（内フィールド表記）
+ * @param y 設置Y座標（内フィールド表記）
+ * @param angle ピースの回転角度（０、９０、１８０、２７０）
+ * @param side ピースの表裏（０：表、１：裏）
+ * @return 置ける場合はＯＫ
+ *         置けない場合はＢＡＤ
+ */
+function f_Judge_K( x, y, angle, side ){
+	var xx;
+	var yy;
+
+	// 
+	xx = x + 4;
+	yy = y + 4;
+	switch ( side * 1 ){
+	    case 0:{
+			switch ( angle % 180 ){
+			    case 0:{	// 180も同じ
+			        // 
+					if ( g_Frame[ xx + 1 ][ yy + 0 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 1 ][ yy + 1 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 1 ][ yy + 2 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 2 ][ yy + 2 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+			        break;
+			    }
+			    default:{	// 270も同じ
+			        // 
+					if ( g_Frame[ xx + 0 ][ yy + 1 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 1 ][ yy - 0 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 2 ][ yy - 0 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 2 ][ yy - 1 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+			        break;
+			    }
+			}
+			break;
+		}
+	    default:{	// 1
+			switch ( angle % 180 ){
+			    case 0:{	// 180も同じ
+			        // 
+					if ( g_Frame[ xx + 1 ][ yy - 0 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 1 ][ yy - 1 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 1 ][ yy - 2 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 2 ][ yy - 2 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+			        break;
+			    }
+			    default:{	// 270も同じ
+			        // 
+					if ( g_Frame[ xx + 0 ][ yy + 1 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 1 ][ yy + 1 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 2 ][ yy + 1 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 2 ][ yy + 2 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+			        break;
+			    }
+			}
+			break;
+	    }
+	}
+	return "OK";
+}
+
+/**
+ * ピースＫの設置
+ * @param x 設置X座標（内フィールド表記）
+ * @param y 設置Y座標（内フィールド表記）
+ * @param angle ピースの回転角度（０、９０、１８０、２７０）
+ * @param side ピースの表裏（０：表、１：裏）
+ * @param status 状態
+ */
+function f_Set_K( x, y, angle, side, status ){
+	var xx;
+	var yy;
+
+	// 
+	xx = x + 4;
+	yy = y + 4;
+	g_Frame[ xx ][ yy ] = status;
+	// 
+	if ( status > 0 ){
+	    // 
+		if ( angle < 180 ){
+		    // 
+		    g_Piece[ 10 ][ 1 ] = g_Piece[ 10 ][ 1 ] + 180;
+		}
+	}
+	switch ( side * 1 ){
+	    case 0:{
+			switch ( angle % 180 ){
+			    case 0:{	// 180も同じ
+			        // 
+					g_Frame[ xx + 1 ][ yy + 0 ] = status;
+					g_Frame[ xx + 1 ][ yy + 1 ] = status;
+					g_Frame[ xx + 1 ][ yy + 2 ] = status;
+					g_Frame[ xx + 2 ][ yy + 2 ] = status;
+			        break;
+			    }
+			    default:{	// 270も同じ
+			        // 
+					g_Frame[ xx + 0 ][ yy + 1 ] = status;
+					g_Frame[ xx + 1 ][ yy - 0 ] = status;
+					g_Frame[ xx + 2 ][ yy - 0 ] = status;
+					g_Frame[ xx + 2 ][ yy - 1 ] = status;
+			        break;
+			    }
+			}
+			break;
+		}
+	    default:{	// 1
+			switch ( angle % 180 ){
+			    case 0:{	// 180も同じ
+			        // 
+					g_Frame[ xx + 1 ][ yy - 0 ] = status;
+					g_Frame[ xx + 1 ][ yy - 1 ] = status;
+					g_Frame[ xx + 1 ][ yy - 2 ] = status;
+					g_Frame[ xx + 2 ][ yy - 2 ] = status;
+			        break;
+			    }
+			    default:{	// 270も同じ
+			        // 
+					g_Frame[ xx + 0 ][ yy + 1 ] = status;
+					g_Frame[ xx + 1 ][ yy + 1 ] = status;
+					g_Frame[ xx + 2 ][ yy + 1 ] = status;
+					g_Frame[ xx + 2 ][ yy + 2 ] = status;
+			        break;
+			    }
+			}
+			break;
+		}
+	}
+}
+
+/**
+ * ピースＬの設置判定
+ * 座標位置そのものは判定しない
+ * @param x 設置X座標（内フィールド表記）
+ * @param y 設置Y座標（内フィールド表記）
+ * @param angle ピースの回転角度（０、９０、１８０、２７０）
+ * @param side ピースの表裏（０：表、１：裏）
+ * @return 置ける場合はＯＫ
+ *         置けない場合はＢＡＤ
+ */
+function f_Judge_L( x, y, angle, side ){
+	var xx;
+	var yy;
+
+	// 
+	xx = x + 4;
+	yy = y + 4;
+	switch ( side * 1 ){
+	    case 0:{
+			switch ( angle * 1 ){
+			    case 0:{
+			        // 
+					if ( g_Frame[ xx + 1 ][ yy + 0 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 1 ][ yy + 1 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 1 ][ yy + 2 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 2 ][ yy + 1 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+			        break;
+			    }
+			    case 90:{
+			        // 
+					if ( g_Frame[ xx + 1 ][ yy + 0 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 2 ][ yy + 0 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 1 ][ yy + 1 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 2 ][ yy - 1 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+			        break;
+			    }
+			    case 180:{
+			        // 
+					if ( g_Frame[ xx + 1 ][ yy - 1 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 1 ][ yy + 0 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 1 ][ yy + 1 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 2 ][ yy + 1 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+			        break;
+			    }
+			    default:{	// 270
+			        // 
+					if ( g_Frame[ xx + 1 ][ yy + 0 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 2 ][ yy + 1 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 0 ][ yy + 1 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 1 ][ yy - 1 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+			        break;
+			    }
+			}
+			break;
+		}
+	    default:{	// 1
+			switch ( angle * 1 ){
+			    case 0:{
+			        // 
+					if ( g_Frame[ xx + 1 ][ yy - 1 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 1 ][ yy + 0 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 1 ][ yy + 1 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 2 ][ yy - 1 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+			        break;
+			    }
+			    case 90:{
+			        // 
+					if ( g_Frame[ xx + 1 ][ yy + 0 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 2 ][ yy + 0 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 1 ][ yy - 1 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 2 ][ yy + 1 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+			        break;
+			    }
+			    case 180:{
+			        // 
+					if ( g_Frame[ xx + 1 ][ yy - 0 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 1 ][ yy - 1 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 1 ][ yy - 2 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 2 ][ yy - 1 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+			        break;
+			    }
+			    default:{	// 270
+			        // 
+					if ( g_Frame[ xx + 0 ][ yy + 1 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 1 ][ yy + 1 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 2 ][ yy + 1 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+					if ( g_Frame[ xx + 1 ][ yy + 2 ] != 0 ){
+					    // 
+					    return "BAD";
+					}
+			        break;
+			    }
+			}
+			break;
+	    }
+	}
+	return "OK";
+}
+
+/**
+ * ピースＬの設置
+ * @param x 設置X座標（内フィールド表記）
+ * @param y 設置Y座標（内フィールド表記）
+ * @param angle ピースの回転角度（０、９０、１８０、２７０）
+ * @param side ピースの表裏（０：表、１：裏）
+ * @param status 状態
+ */
+function f_Set_L( x, y, angle, side, status ){
+	var xx;
+	var yy;
+
+	// 
+	xx = x + 4;
+	yy = y + 4;
+	g_Frame[ xx ][ yy ] = status;
+	switch ( side * 1 ){
+	    case 0:{
+			switch ( angle * 1 ){
+			    case 0:{
+			        // 
+					g_Frame[ xx + 1 ][ yy + 0 ] = status;
+					g_Frame[ xx + 1 ][ yy + 1 ] = status;
+					g_Frame[ xx + 1 ][ yy + 2 ] = status;
+					g_Frame[ xx + 2 ][ yy + 1 ] = status;
+			        break;
+			    }
+			    case 90:{
+			        // 
+					g_Frame[ xx + 1 ][ yy + 0 ] = status;
+					g_Frame[ xx + 2 ][ yy + 0 ] = status;
+					g_Frame[ xx + 1 ][ yy + 1 ] = status;
+					g_Frame[ xx + 2 ][ yy - 1 ] = status;
+			        break;
+			    }
+			    case 180:{
+			        // 
+					g_Frame[ xx + 1 ][ yy - 1 ] = status;
+					g_Frame[ xx + 1 ][ yy + 0 ] = status;
+					g_Frame[ xx + 1 ][ yy + 1 ] = status;
+					g_Frame[ xx + 2 ][ yy + 1 ] = status;
+			        break;
+			    }
+			    default:{	// 270
+			        // 
+					g_Frame[ xx + 1 ][ yy + 0 ] = status;
+					g_Frame[ xx + 2 ][ yy + 0 ] = status;
+					g_Frame[ xx + 0 ][ yy + 1 ] = status;
+					g_Frame[ xx + 1 ][ yy - 1 ] = status;
+			        break;
+			    }
+			}
+			break;
+		}
+	    default:{	// 1
+			switch ( angle * 1 ){
+			    case 0:{
+			        // 
+					g_Frame[ xx + 1 ][ yy - 1 ] = status;
+					g_Frame[ xx + 1 ][ yy + 0 ] = status;
+					g_Frame[ xx + 1 ][ yy + 1 ] = status;
+					g_Frame[ xx + 2 ][ yy - 1 ] = status;
+			        break;
+			    }
+			    case 90:{
+			        // 
+					g_Frame[ xx + 1 ][ yy + 0 ] = status;
+					g_Frame[ xx + 2 ][ yy + 0 ] = status;
+					g_Frame[ xx + 1 ][ yy - 1 ] = status;
+					g_Frame[ xx + 2 ][ yy + 1 ] = status;
+			        break;
+			    }
+			    case 180:{
+			        // 
+					g_Frame[ xx + 1 ][ yy - 0 ] = status;
+					g_Frame[ xx + 1 ][ yy - 1 ] = status;
+					g_Frame[ xx + 1 ][ yy - 2 ] = status;
+					g_Frame[ xx + 2 ][ yy - 1 ] = status;
+			        break;
+			    }
+			    default:{	// 270
+			        // 
+					g_Frame[ xx + 0 ][ yy + 1 ] = status;
+					g_Frame[ xx + 1 ][ yy + 1 ] = status;
+					g_Frame[ xx + 2 ][ yy + 1 ] = status;
+					g_Frame[ xx + 1 ][ yy + 2 ] = status;
+			        break;
+			    }
+			}
+			break;
+		}
+	}
+}
+
+/**
+ * ピース表示
+ * @param x 設置X座標
+ * @param y 設置Y座標
+ * @return そこに設置するブロック
+ */
+function f_PieceDisp( x, y ){
+	var org;
+	var ptn;
+	var rtn;
+	
+	org = g_Frame[ x ][ y ];
+	ptn = 0;
+	// 
+	if ( org == g_Frame[ x ][ y - 1 ] ){
+	    // 
+		ptn = ptn + 1;
+	}
+	ptn = ptn * 2;
+	// 
+	if ( org == g_Frame[ x + 1 ][ y ] ){
+	    // 
+		ptn = ptn + 1;
+	}
+	ptn = ptn * 2;
+	// 
+	if ( org == g_Frame[ x ][ y + 1 ] ){
+	    // 
+		ptn = ptn + 1;
+	}
+	ptn = ptn * 2;
+	// 
+	if ( org == g_Frame[ x - 1 ][ y ] ){
+	    // 
+		ptn = ptn + 1;
+	}
+	// 
+	switch ( ptn ){
+	    case 1:{
+	        // 
+	        rtn = "・"
+	        break;
+	    }
+	    case 2:{
+	        // 
+	        rtn = "・"
+	        break;
+	    }
+	    case 3:{
+	        // 
+	        rtn = "┐"
+	        break;
+	    }
+	    case 4:{
+	        // 
+	        rtn = "・"
+	        break;
+	    }
+	    case 5:{
+	        // 
+	        rtn = "─"
+	        break;
+	    }
+	    case 6:{
+	        // 
+	        rtn = "┌"
+	        break;
+	    }
+	    case 7:{
+	        // 
+	        rtn = "┬"
+	        break;
+	    }
+	    case 8:{
+	        // 
+	        rtn = "・"
+	        break;
+	    }
+	    case 9:{
+	        // 
+	        rtn = "┘"
+	        break;
+	    }
+	    case 10:{
+	        // 
+	        rtn = "│"
+	        break;
+	    }
+	    case 11:{
+	        // 
+	        rtn = "┤"
+	        break;
+	    }
+	    case 12:{
+	        // 
+	        rtn = "└"
+	        break;
+	    }
+	    case 13:{
+	        // 
+	        rtn = "┴"
+	        break;
+	    }
+	    case 14:{
+	        // 
+	        rtn = "├"
+	        break;
+	    }
+	    default:{	// 15
+	        rtn = "┼"
+	        break;
+	    }
+	}
+	return rtn;
+}
+
+/**
+ * 表示
+ */
+function f_Disp(){
+	var tmp;
+	var CounterX;
+	var CounterY;
+
+	tmp = "";
+	// 
+	for ( CounterY = 0; CounterY < g_FrameY + 8; CounterY++ ){
+		// 
+		for ( CounterX = 0; CounterX < g_FrameX + 8; CounterX++ ){
+			// 
+			switch ( g_Frame[ CounterX ][ CounterY ] * 1 ){
+			    case 0:{
+			        // 
+			        tmp = tmp + "＿";
+			        break;
+			    }
+			    case 9:{
+			        // 
+			        tmp = tmp + "■";
+			        break;
+			    }
+			    default:{
+			        tmp = tmp + f_PieceDisp( CounterX, CounterY );
+			        break;
+			    }
+			}
+		}
+		tmp = tmp + "\n";
+	}
+	document.forms[0].Disp.value = tmp;
+}
+
+/**
+ * 空いてる場所を探す
+ * @return 返り値用グローバル変数で返す。<br>
+ *         添え字０は、X座標（内フィールド表記）<br>
+ *         添え字１は、Y座標（内フィールド表記）<br>
+ */
+function f_FindSpace(){
+	var CounterX;
+	var CounterY;
+	// 
+	for ( CounterX = 0 + 4; CounterX < g_FrameX + 4; CounterX++ ){
+		// 
+		for ( CounterY = 0 + 4; CounterY < g_FrameY + 4; CounterY++ ){
+			// 
+			if ( g_Frame[ CounterX ][ CounterY ] == 0 ){
+			    // 
+			    g_Arg[ 0 ] = CounterX - 4;
+			    g_Arg[ 1 ] = CounterY - 4;
+			    return;
+			}
+		}
+	}
+}
+
+/**
+ * 設置判定の外枠
+ * @param piece_n ピース番号
+ * @param x 設置X座標（内フィールド表記）
+ * @param y 設置Y座標（内フィールド表記）
+ * @return 置ける場合はＯＫ
+ *         置けない場合はＢＡＤ
+ */
+function f_Judge( piece_n, x, y ){
+	var rtn;
+	
+	// 
+	switch ( piece_n * 1 ){
+	    case 0:{
+	        // 
+	        rtn = f_Judge_A( x, y, g_Piece[ piece_n ][ 1 ], g_Piece[ piece_n ][ 2 ] );
+	        break;
+	    }
+	    case 1:{
+	        // 
+	        rtn = f_Judge_B( x, y, g_Piece[ piece_n ][ 1 ], g_Piece[ piece_n ][ 2 ] );
+	        break;
+	    }
+	    case 2:{
+	        // 
+	        rtn = f_Judge_C( x, y, g_Piece[ piece_n ][ 1 ], g_Piece[ piece_n ][ 2 ] );
+	        break;
+	    }
+	    case 3:{
+	        // 
+	        rtn = f_Judge_D( x, y, g_Piece[ piece_n ][ 1 ], g_Piece[ piece_n ][ 2 ] );
+	        break;
+	    }
+	    case 4:{
+	        // 
+	        rtn = f_Judge_E( x, y, g_Piece[ piece_n ][ 1 ], g_Piece[ piece_n ][ 2 ] );
+	        break;
+	    }
+	    case 5:{
+	        // 
+	        rtn = f_Judge_F( x, y, g_Piece[ piece_n ][ 1 ], g_Piece[ piece_n ][ 2 ] );
+	        break;
+	    }
+	    case 6:{
+	        // 
+	        rtn = f_Judge_G( x, y, g_Piece[ piece_n ][ 1 ], g_Piece[ piece_n ][ 2 ] );
+	        break;
+	    }
+	    case 7:{
+	        // 
+	        rtn = f_Judge_H( x, y, g_Piece[ piece_n ][ 1 ], g_Piece[ piece_n ][ 2 ] );
+	        break;
+	    }
+	    case 8:{
+	        // 
+	        rtn = f_Judge_I( x, y, g_Piece[ piece_n ][ 1 ], g_Piece[ piece_n ][ 2 ] );
+	        break;
+	    }
+	    case 9:{
+	        // 
+	        rtn = f_Judge_J( x, y, g_Piece[ piece_n ][ 1 ], g_Piece[ piece_n ][ 2 ] );
+	        break;
+	    }
+	    case 10:{
+	        // 
+	        rtn = f_Judge_K( x, y, g_Piece[ piece_n ][ 1 ], g_Piece[ piece_n ][ 2 ] );
+	        break;
+	    }
+	    default:{	// 11
+	        rtn = f_Judge_L( x, y, g_Piece[ piece_n ][ 1 ], g_Piece[ piece_n ][ 2 ] );
+	        break;
+	    }
+	}
+	return rtn;
+}
+
+/**
+ * 設置の外枠
+ * @param piece_n ピース番号
+ * @param x 設置X座標（内フィールド表記）
+ * @param y 設置Y座標（内フィールド表記）
+ * @param status 状態
+ */
+function f_Set( piece_n, x, y, status ){
+	// 
+	switch ( piece_n * 1 ){
+	    case 0:{
+	        // 
+	        f_Set_A( x, y, g_Piece[ piece_n ][ 1 ], g_Piece[ piece_n ][ 2 ], status );
+	        break;
+	    }
+	    case 1:{
+	        // 
+	        f_Set_B( x, y, g_Piece[ piece_n ][ 1 ], g_Piece[ piece_n ][ 2 ], status );
+	        break;
+	    }
+	    case 2:{
+	        // 
+	        f_Set_C( x, y, g_Piece[ piece_n ][ 1 ], g_Piece[ piece_n ][ 2 ], status );
+	        break;
+	    }
+	    case 3:{
+	        // 
+	        f_Set_D( x, y, g_Piece[ piece_n ][ 1 ], g_Piece[ piece_n ][ 2 ], status );
+	        break;
+	    }
+	    case 4:{
+	        // 
+	        f_Set_E( x, y, g_Piece[ piece_n ][ 1 ], g_Piece[ piece_n ][ 2 ], status );
+	        break;
+	    }
+	    case 5:{
+	        // 
+	        f_Set_F( x, y, g_Piece[ piece_n ][ 1 ], g_Piece[ piece_n ][ 2 ], status );
+	        break;
+	    }
+	    case 6:{
+	        // 
+	        f_Set_G( x, y, g_Piece[ piece_n ][ 1 ], g_Piece[ piece_n ][ 2 ], status );
+	        break;
+	    }
+	    case 7:{
+	        // 
+	        f_Set_H( x, y, g_Piece[ piece_n ][ 1 ], g_Piece[ piece_n ][ 2 ], status );
+	        break;
+	    }
+	    case 8:{
+	        // 
+	        f_Set_I( x, y, g_Piece[ piece_n ][ 1 ], g_Piece[ piece_n ][ 2 ], status );
+	        break;
+	    }
+	    case 9:{
+	        // 
+	        f_Set_J( x, y, g_Piece[ piece_n ][ 1 ], g_Piece[ piece_n ][ 2 ], status );
+	        break;
+	    }
+	    case 10:{
+	        // 
+	        f_Set_K( x, y, g_Piece[ piece_n ][ 1 ], g_Piece[ piece_n ][ 2 ], status );
+	        break;
+	    }
+	    default:{	// 11
+	        f_Set_L( x, y, g_Piece[ piece_n ][ 1 ], g_Piece[ piece_n ][ 2 ], status );
+	        break;
+	    }
+	}
+}
+
+/**
+ * 再帰の残り埋め
+ * @param x 設置X座標（内フィールド表記）
+ * @param y 設置Y座標（内フィールド表記）
+ */
+function f_VirtualSet( x, y ){
+	var xx;
+	var yy;
+
+	if ( g_VirtualCount > 70 ){
+	    // 
+		throw( "e f_VirtualSet 1" );
+	}
+	xx = x + 4;
+	yy = y + 4;
+	g_VirtualCount = g_VirtualCount + 1;
+	g_Frame[ xx ][ yy ] = -2;
+	// 
+	if ( g_Frame[ xx ][ yy - 1 ] == 0 ){
+	    // 
+		f_VirtualSet( x, y - 1 );
+	}
+	if ( g_Frame[ xx + 1 ][ yy ] == 0 ){
+	    // 
+		f_VirtualSet( x + 1, y );
+	}
+	if ( g_Frame[ xx ][ yy + 1 ] == 0 ){
+	    // 
+		f_VirtualSet( x, y + 1 );
+	}
+	if ( g_Frame[ xx - 1 ][ yy ] == 0 ){
+	    // 
+		f_VirtualSet( x - 1, y );
+	}
+}
+
+/**
+ * 残り方の判定
+ * @param piece_n ピース番号
+ * @param x 設置X座標（内フィールド表記）
+ * @param y 設置Y座標（内フィールド表記）
+ * @return 置ける場合はＯＫ
+ *         置けない場合はＢＡＤ
+ */
+function f_FrameJudge( piece_n, x, y ){
+	var Counter;
+	var xx;
+	var yy;
+	var rtn;
+	var CounterX;
+	var CounterY;
+	
+	// ピースの仮設置
+	f_Set( piece_n, x, y, -1 );
+    rtn = "OK";
+	// 
+	g_Arg[ 0 ] = -1;
+	g_Arg[ 1 ] = -1;
+	f_FindSpace();
+	for ( ; g_Arg[ 0 ] != -1;  ){
+		xx = g_Arg[ 0 ];
+		yy = g_Arg[ 1 ];
+		g_VirtualCount = 0;
+		f_VirtualSet( xx, yy );
+		// 
+		if ( g_VirtualCount % 5 != 0 ){
+		    // 
+		    rtn = "BAD";
+		    break;
+		}
+		g_Arg[ 0 ] = -1;
+		g_Arg[ 1 ] = -1;
+		f_FindSpace();
+	}
+	// 仮設置を戻す
+	for ( CounterY = 0; CounterY < g_FrameY + 8; CounterY++ ){
+		// 
+		for ( CounterX = 0; CounterX < g_FrameX + 8; CounterX++ ){
+			if ( g_Frame[ CounterX ][ CounterY ] < 0 ){
+			    // 
+			    g_Frame[ CounterX ][ CounterY ] = 0;
+			}
+		}
+	}
+    return rtn;
+}
+
+/**
+ * 有効な設置を１つする
+ */
+function f_PieceSet(){
+try{
+	var Counter1;
+	var Counter2;
+	var rtn1;
+	var rtn2;
+	var x;
+	var y;
+	var SetFlag;
+	var piece_n;
+	var BackFlag;
+	
+	g_Arg[ 0 ] = -1;
+	g_Arg[ 1 ] = -1;
+	f_FindSpace();
+//alert( "2010/01/05 21:48 f_PieceSet" + " g_Arg[ 0 ]:" + g_Arg[ 0 ] + " g_Arg[ 1 ]:" + g_Arg[ 1 ] );
+	// 
+	if ( g_Arg[ 0 ] == -1 ){
+	    // 
+	    throw( "COMPLETE" );
+	}
+	x = g_Arg[ 0 ];
+	y = g_Arg[ 1 ];
+	// 未設置を探す
+	for ( Counter1 = 0; ( Counter1 < PN )&&( g_Piece[ Counter1 ][ 0 ] != "未設置" ); Counter1++ ){
+	}
+	// 未設置がないか
+	if ( Counter1 == PN ){
+		// ロジックエラー
+		throw( "e f_PieceSet 1" );
+	}
+	piece_n = Counter1;
+	BackFlag = "OFF";
+	for ( ; ;  ){
+		// 
+		if ( BackFlag == "OFF" ){
+			// 
+			SetFlag = "BAD";
+			rtn1 = f_Judge( piece_n, x, y );
+			rtn2 = "";
+			// 
+			if ( rtn1 == "OK" ){
+			    // 
+				rtn2 = f_FrameJudge( piece_n, x, y );
+				// 
+				if ( rtn2 == "OK" ){
+					SetFlag = "OK";
+				}
+			}
+if ( piece_n == 11 ){
+//	alert( "2010/01/01 23:31 f_PieceSet" + " rtn1:" + rtn1 + " rtn2:" + rtn2 + " piece_n:" + piece_n + " g_Piece[ piece_n ]:" + g_Piece[ piece_n ] );
+}
+			if ( SetFlag == "OK" ){
+				// ピース情報履歴保持
+			    g_Piece[ piece_n ][ 4 ] = x;
+			    g_Piece[ piece_n ][ 5 ] = y;
+				f_HistPiece();
+			    // 設置処理
+				for ( Counter1 = 0; Counter1 < PN; Counter1++ ){
+					// 
+					if ( g_Piece[ Counter1 ][ 0 ] == "試行済" ){
+					    // 
+					    g_Piece[ Counter1 ][ 0 ] = "未設置";
+					}
+				}
+			    g_Num = g_Num + 1;
+			    g_Piece[ piece_n ][ 0 ] = "設置済";
+			    g_Piece[ piece_n ][ 3 ] = g_Num;
+			    f_Set( piece_n, x, y, g_Num + 9 );
+			    return;
+			}
+		}
+		BackFlag = "OFF";
+		// 次の候補を挙げる
+		// 回転する
+	    g_Piece[ piece_n ][ 1 ] = ( g_Piece[ piece_n ][ 1 ] + 90 ) % 360;
+		// 回転が終わったか
+		if ( g_Piece[ piece_n ][ 1 ] == 0 ){
+		    // 
+		    g_Piece[ piece_n ][ 2 ] = ( g_Piece[ piece_n ][ 2 ] + 1 ) % 2;
+			// 裏が終わったか
+			if ( g_Piece[ piece_n ][ 2 ] == 0 ){
+			    // 
+/*
+if ( !confirm( "continue?" ) ){
+	break;
+}
+*/
+			    g_Piece[ piece_n ][ 0 ] = "試行済";
+			    // 次のピースを探す
+				for ( Counter1 = 0; ( Counter1 < PN )&&( g_Piece[ Counter1 ][ 0 ] != "未設置" ); Counter1++ ){
+				}
+				// 未設置がないか
+				if ( Counter1 == PN ){
+//alert( "2009/12/28 21:19 f_PieceSet" + " rtn1:" + rtn1 + " rtn2:" + rtn2 + " piece_n:" + piece_n + " g_Piece[ piece_n ]:" + g_Piece[ piece_n ] );
+					// 戻り処理
+					// フレーム状態を戻す
+					for ( Counter1 = 0; Counter1 < PN; Counter1++ ){
+						// 
+						if ( ( g_Piece[ Counter1 ][ 0 ] == "設置済" )&&( g_Piece[ Counter1 ][ 3 ] == g_Num ) ){
+						    // 
+						    break;
+						}
+					}
+					if ( Counter1 == PN ){
+						// ロジックエラー
+						throw( "e f_PieceSet 2" );
+					}
+				    f_Set( Counter1, g_Piece[ Counter1 ][ 4 ], g_Piece[ Counter1 ][ 5 ], 0 );
+					// ピース指定
+					piece_n = Counter1;
+				    // 空き位置を戻す
+				    x = g_Piece[ piece_n ][ 4 ];
+				    y = g_Piece[ piece_n ][ 5 ];
+					// 設置数を戻す
+				    g_Num = g_Num - 1;
+					// ピース状態を戻す
+					for ( Counter1 = 0; Counter1 < PN; Counter1++ ){
+						for ( Counter2 = 0; Counter2 < 6; Counter2++ ){
+							if ( Counter1 != piece_n ){
+								g_Piece[ Counter1 ][ Counter2 ] = g_HistPiece[ g_Num ][ Counter1 ][ Counter2 ];
+							}
+						}
+					}
+					g_Piece[ piece_n ][ 0 ] = "未設置";
+					// 戻しフラグを立てる
+					BackFlag = "ON";
+					f_Disp();
+				}
+				else{
+					piece_n = Counter1;
+				}
+			}
+		}
+	}
+}
+catch( mesg ){
+	alert( mesg );
+	throw true;
+}
+}
+
+/**
+ * セーブ
+ */
+function f_Save(){
+	var tmp;
+	var Counter1;
+	var Counter2;
+
+	tmp = "";
+	// 現ピース情報
+	for ( Counter1 = 0; Counter1 < PN; Counter1++ ){
+		tmp = tmp + g_Piece[ Counter1 ] + "\n";
+	}
+	// ピース履歴情報
+	for ( Counter1 = 0; Counter1 < PN; Counter1++ ){
+		for ( Counter2 = 0; Counter2 < PN; Counter2++ ){
+			tmp = tmp + g_HistPiece[ Counter1 ][ Counter2 ] + "\n";
+		}
+	}
+	// フレーム情報
+	for ( Counter1 = 0; Counter1 < g_FrameX + 8; Counter1++ ){
+		tmp = tmp + g_Frame[ Counter1 ] + "\n";
+	}
+	// 設置数情報
+	tmp = tmp + g_Num + "\n";
+	document.forms[0].Save.value = tmp;
+}
+
+/**
+ * リストア
+ */
+function f_Restore(){
+	var tmp1;
+	var tmp2;
+	var tmp3;
+	var Counter1;
+	var Counter2;
+	var Counter3;
+
+	tmp1 = document.forms[0].Save.value;
+	tmp2 = tmp1.split( "\n" );
+	Counter1 = 0;
+	for ( Counter2 = 0; Counter2 < PN; Counter1++, Counter2++ ){
+		tmp3 = tmp2[ Counter1 ].split( "," );
+		g_Piece[ Counter2 ] = tmp3;
+		g_Piece[ Counter2 ][ 1 ] = g_Piece[ Counter2 ][ 1 ] * 1;
+		g_Piece[ Counter2 ][ 2 ] = g_Piece[ Counter2 ][ 2 ] * 1;
+		g_Piece[ Counter2 ][ 3 ] = g_Piece[ Counter2 ][ 3 ] * 1;
+		g_Piece[ Counter2 ][ 4 ] = g_Piece[ Counter2 ][ 4 ] * 1;
+		g_Piece[ Counter2 ][ 5 ] = g_Piece[ Counter2 ][ 5 ] * 1;
+	}
+	for ( Counter2 = 0; Counter2 < PN; Counter2++ ){
+		for ( Counter3 = 0; Counter3 < PN; Counter3++ ){
+			tmp3 = tmp2[ Counter1 ].split( "," );
+			g_HistPiece[ Counter2 ][ Counter3 ] = tmp3;
+			g_HistPiece[ Counter2 ][ Counter3 ][ 1 ] = g_HistPiece[ Counter2 ][ Counter3 ][ 1 ] * 1;
+			g_HistPiece[ Counter2 ][ Counter3 ][ 2 ] = g_HistPiece[ Counter2 ][ Counter3 ][ 2 ] * 1;
+			g_HistPiece[ Counter2 ][ Counter3 ][ 3 ] = g_HistPiece[ Counter2 ][ Counter3 ][ 3 ] * 1;
+			g_HistPiece[ Counter2 ][ Counter3 ][ 4 ] = g_HistPiece[ Counter2 ][ Counter3 ][ 4 ] * 1;
+			g_HistPiece[ Counter2 ][ Counter3 ][ 5 ] = g_HistPiece[ Counter2 ][ Counter3 ][ 5 ] * 1;
+			Counter1 = Counter1 + 1;
+		}
+	}
+	for ( Counter2 = 0; Counter2 < g_FrameX + 8; Counter1++, Counter2++ ){
+		tmp3 = tmp2[ Counter1 ].split( "," );
+		g_Frame[ Counter2 ] = tmp3;
+		// 
+		for ( Counter3 = 0; Counter3 < g_FrameY + 8; Counter3++ ){
+			g_Frame[ Counter2 ][ Counter3 ] = g_Frame[ Counter2 ][ Counter3 ] * 1;
+		}
+	}
+	g_Num = tmp2[ Counter1 ] * 1;
+}
+
+/**
+ * ピース情報履歴保持
+ */
+function f_HistPiece(){
+	var Counter1;
+	var Counter2;
+	
+	// 
+	for ( Counter1 = 0; Counter1 < PN; Counter1++ ){
+		for ( Counter2 = 0; Counter2 < 6; Counter2++ ){
+			g_HistPiece[ g_Num ][ Counter1 ][ Counter2 ] = g_Piece[ Counter1 ][ Counter2 ];
+		}
+	}
+}
+
+/**
+ * ピース情報履歴表示
+ */
+function f_DispHist(){
+	var tmp;
+	var Counter1;
+	var Counter2;
+
+	tmp = "";
+	// 
+	for ( Counter1 = 0; Counter1 < PN; Counter1++ ){
+		tmp = tmp + ( Counter1 + ":" ) + "\n";
+		for ( Counter2 = 0; Counter2 < PN; Counter2++ ){
+			tmp = tmp + ( Counter2 + ":" ) + g_HistPiece[ Counter1 ][ Counter2 ] + "\n";
+		}
+		tmp = tmp + "\n";
+	}
+	document.forms[0].Hist.value = tmp;
+}
+
+/**
+ * 自動
+ */
+function f_Auto(){
+try{
+	g_Try = 0;
+	// 
+	for ( ; g_Try < document.forms[0].TryLimit.value;  ){
+		g_Try = g_Try + 1;
+		document.forms[0].TryNum.value = g_Try;
+		document.forms[0].DispBefore.value = document.forms[0].Disp.value;
+		f_PieceSet();
+		f_Disp();
+	}
+	alert( g_Try + " try end" );
+}
+catch( mesg ){
+}
+}
+
+// ■■■■■　メイン　■■■■■
+var g_FrameX = 10;
+var g_FrameY = 6;
+var g_Frame;
+g_Frame = new Array( g_FrameX + 8 );
+
+// 
+for ( g_Counter = 0; g_Counter < g_FrameX + 8; g_Counter++ ){
+	g_Frame[ g_Counter ] = new Array( g_FrameY + 8 );
+}
+// 
+for ( g_CounterX = 0; g_CounterX < g_FrameX + 8; g_CounterX++ ){
+	// 
+	for ( g_CounterY = 0; g_CounterY < g_FrameY + 8; g_CounterY++ ){
+		g_Frame[ g_CounterX ][ g_CounterY ] = 9;
+	}
+}
+// 
+for ( g_CounterX = 0 + 4; g_CounterX < g_FrameX + 4; g_CounterX++ ){
+	// 
+	for ( g_CounterY = 0 + 4; g_CounterY < g_FrameY + 4; g_CounterY++ ){
+		g_Frame[ g_CounterX ][ g_CounterY ] = 0;
+	}
+}
+// ピース数
+var PN = 12;
+/*
+ピース情報
+添え字０：状態（０：未設置、１：設置済、２：試行済）
+添え字１：角度
+添え字２：表裏（０：表、１：裏）
+添え字３：順番
+添え字４：基準X座標（内フィールド表記）
+添え字５：基準Y座標（内フィールド表記）
+*/
+var g_Piece;
+g_Piece = new Array( PN );
+// 
+for ( g_Counter = 0; g_Counter < PN; g_Counter++ ){
+	g_Piece[ g_Counter ] = new Array( 6 );
+}
+// 
+for ( g_Counter = 0; g_Counter < PN; g_Counter++ ){
+	// 
+	g_Piece[ g_Counter ][ 0 ] = "未設置";
+	g_Piece[ g_Counter ][ 1 ] = 0;
+	g_Piece[ g_Counter ][ 2 ] = 0;
+	g_Piece[ g_Counter ][ 3 ] = 0;
+	g_Piece[ g_Counter ][ 4 ] = 0;
+	g_Piece[ g_Counter ][ 5 ] = 0;
+}
+// 設置数
+var g_Num = 0;
+// 関数の値戻し
+var g_Arg = new Array( 2 );
+// 仮設置カウント
+var g_VirtualCount;
+// ピース情報履歴
+var g_HistPiece;
+g_HistPiece = new Array( PN );
+for ( g_Counter1 = 0; g_Counter1 < PN; g_Counter1++ ){
+	g_HistPiece[ g_Counter1 ] = new Array( PN );
+	for ( g_Counter2 = 0; g_Counter2 < PN; g_Counter2++ ){
+		g_HistPiece[ g_Counter1 ][ g_Counter2 ] = new Array( 6 );
+	}
+}
+// 設置試行数
+var g_Try;
+
+</script>
+<head>
+</head>
+<body>
+<form>
+<textarea cols="110" rows="4" readonly>
+■■■■■　■■■■　■■■■　■■■　■■■　■■■　　■■　■■　　８■　　■■■　　■■　　■■
+０　　　　　１　　■　２　■　　３　■　４■　　５■■　６　■　７■■　■■■　９　■■　10■　　11■■
+Ａ　　　　　Ｂ　　　　Ｃ　　　　Ｄ　■　Ｅ■　　Ｆ　　　Ｇ■■　Ｈ　■　Ｉ■　　Ｊ　　　　Ｋ■■　Ｌ■
+</textarea>
+<table>
+<tr>
+<td valign="top">
+<table>
+<tr>
+<td>
+	<textarea name="Disp" cols="40" rows="15" readonly></textarea><br>
+	<textarea name="DispBefore" cols="40" rows="15" readonly></textarea>
+</td>
+<td>
+	<input type="button" value="設置" onClick="document.forms[0].DispBefore.value = document.forms[0].Disp.value;f_PieceSet();f_Disp();"><br>
+	<br>
+	<br>
+	<input type="button" value="自動" onClick="f_Auto();">ブレイク間隔指定<br>
+	<input type="text" name="TryLimit" value="1000"><br>
+	<input type="text" name="TryNum" value="" readonly><br>
+<!--
+	<input type="button" value="戻し" onClick="f_Back();f_Disp();"><br>
+-->
+</td>
+</tr>
+</table>
+<input type="button" value="表示" onClick="f_Disp();"><br>
+<!--
+X座標<input type="text" name="X" value="">
+Y座標<input type="text" name="Y" value="">
+値<input type="text" name="Status" value="">
+<input type="button" value="SET" onClick="f_DynamicSet();"><br>
+-->
+<!--
+<table>
+<tr>
+<td>
+	<textarea name="PieceStatus" cols="25" rows="15" readonly></textarea>
+</td>
+<td>
+	<textarea name="PieceStatusBefore" cols="25" rows="15" readonly></textarea>
+</td>
+<td>
+	<input type="button" value="状態" onClick="f_StatusDisp();"><br>
+</td>
+</tr>
+</table>
+-->
+</td>
+<td valign="top">
+	<textarea name="Save" cols="40" rows="33"></textarea><br>
+	<input type="button" value="セーブ" onClick="document.forms[0].Stack.value = document.forms[0].Save.value;f_Save();"><br>
+	<input type="button" value="リストア" onClick="f_Restore();f_Disp();"><br>
+</td>
+<!--
+<td>
+	<input type="button" value="コピー" onClick="document.forms[0].Stack.value = document.forms[0].Save.value;"><br>
+</td>
+-->
+<td valign="top">
+	<textarea name="Stack" cols="40" rows="33" readonly></textarea><br>
+</td>
+<td valign="top">
+	<textarea name="Hist" cols="24" rows="33" readonly></textarea><br>
+	<input type="button" value="履歴" onClick="document.forms[0].HistBefore.value = document.forms[0].Hist.value;f_DispHist();"><br>
+</td>
+<td valign="top">
+	<textarea name="HistBefore" cols="24" rows="33" readonly></textarea><br>
+</td>
+</tr>
+</table>
+</form>
+</body>
+</html>
